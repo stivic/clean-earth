@@ -41,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
 	    change = Vector3.zero;
 	    change.x = Input.GetAxisRaw("Horizontal");
 	    change.y = Input.GetAxisRaw("Vertical");
-	    if (Input.GetButtonDown("teleport") && currentState != PlayerState.teleport)
+	    if (Input.GetButtonDown("Teleport") && currentState != PlayerState.teleport)
 	    {
 		    StartCoroutine(TeleportCo());
 	    }
@@ -49,9 +49,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void FixedUpdate()
     {
-	   
-	    UpdateAnimationAndMove(); 
-	    
+	    UpdateAnimationAndMove();
     }
 
     private void UpdateAnimationAndMove()
