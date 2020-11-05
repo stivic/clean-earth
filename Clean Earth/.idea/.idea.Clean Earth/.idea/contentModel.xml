@@ -209,11 +209,14 @@
           </e>
         </e>
         <e p="Scripts" t="Include">
+          <e p="AIBehaviour.cs" t="Include" />
           <e p="AIMovement.cs" t="Include" />
           <e p="CameraMovement.cs" t="Include" />
+          <e p="DistanceCollider.cs" t="Include" />
           <e p="InteractionObject.cs" t="Include" />
           <e p="Inventory.cs" t="Include" />
           <e p="PlayerBehaviour.cs" t="Include" />
+          <e p="PlayerCollider.cs" t="Include" />
           <e p="PlayerInfo.cs" t="Include" />
           <e p="PlayerInteract.cs" t="Include" />
           <e p="PlayerMovement.cs" t="Include" />

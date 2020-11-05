@@ -6,29 +6,34 @@ public class Inventory : MonoBehaviour
 {
     //public static int inventoryNum = 10;
     public GameObject[] inventory = new GameObject[10];
+    private PlayerInfo info;
    
-    
-
-    public void AddItem(GameObject item)
+    void Start()
     {
-        bool isFull = false;
+        info = GetComponent<PlayerInfo>();
+    }
+
+    public bool AddItem(GameObject item)
+    {
+        bool isFull = true;
         for(int i = 0; i<inventory.Length; i++)
         {
             if (inventory[i] == null)
             {
                 inventory[i] = item;
                 Debug.Log(item.name + " is added");
-                isFull = true;
+                isFull = false;
                 item.SendMessage("DoInteraction");
+                info.IncreaseKarma();
                 break;
             }
         }
-        if (!isFull)
+        if (isFull)
         {
             Debug.Log("Inventory is full");
         }
-        
-        
+
+        return !isFull;
     }
     //za sada baca prvi item po redu iz inventory-a
     public void ThrowItem()
@@ -47,7 +52,7 @@ public class Inventory : MonoBehaviour
             item.transform.position = newPosition;
             //item.SendMessage("Throw");
             item.SetActive(true);
-
+            info.DecreaseKarma();
             GameObject[] inventoryTmp = new GameObject[10];
             for(int i = 1; i<inventory.Length; i++)
             {

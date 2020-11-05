@@ -27,15 +27,15 @@ public class TeleportationOrb : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             Destroy(this.gameObject);
-            SwapPlayers(other.gameObject);
+            SwapPlayers(other.transform.parent.GetComponent<Transform>());
         }
     }
     
-    private void SwapPlayers(GameObject ai)
+    private void SwapPlayers(Transform ai)
     {
         Vector3 temp = player.transform.position;
         player.transform.SetPositionAndRotation(ai.gameObject.transform.position, Quaternion.identity);
-        ai.transform.SetPositionAndRotation(temp, Quaternion.identity);
+        ai.SetPositionAndRotation(temp, Quaternion.identity);
         SwapPlayerInfo(player.GetComponent<PlayerInfo>(), ai.GetComponent<PlayerInfo>());
     }
 

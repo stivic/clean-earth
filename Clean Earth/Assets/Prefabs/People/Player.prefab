@@ -77,7 +77,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 7152930139536384079, guid: 34d31f7320da84b4aac7539ac652dfbd,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -102,7 +102,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 1
-  m_Mass: 0.13309488
+  m_Mass: 0.07336307
   m_LinearDrag: 1000
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -124,7 +124,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.000000029802322, y: -0.4973632}
+  m_Offset: {x: -0.0035562515, y: -0.4609956}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -135,7 +135,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.49665648, y: 0.26798177}
+  m_Size: {x: 0.37574577, y: 0.19524658}
   m_EdgeRadius: 0
 --- !u!114 &4624264430203505876
 MonoBehaviour:
@@ -184,8 +184,8 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.026340246}
-  m_Size: {x: 0.6271851, y: 1.0477009}
+  m_Offset: {x: -0.0012278557, y: -0.06450534}
+  m_Size: {x: 0.75231934, y: 1.1240311}
   m_Direction: 0
 --- !u!114 &-5508504167989315763
 MonoBehaviour:
@@ -213,7 +213,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentInterObj: {fileID: 0}
   currentInterObjScript: {fileID: 0}
-  inventoryScript: {fileID: 0}
+  inventoryScript: {fileID: 795926698497616504}
 --- !u!114 &795926698497616504
 MonoBehaviour:
   m_ObjectHideFlags: 0
