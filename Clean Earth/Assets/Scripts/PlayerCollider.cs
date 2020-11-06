@@ -5,11 +5,18 @@ using UnityEngine;
 public class PlayerCollider : MonoBehaviour
 {
     private AIBehaviour parentScript;
-    void Start(){
+    void Start()
+    {
         parentScript = transform.parent.GetComponent<AIBehaviour>();
     }
     
-    void OnTriggerEnter2D(Collider2D other){
+    void OnTriggerEnter2D(Collider2D other)
+    {
         parentScript.RecieveTriggerEnter("playerCollider", other);
+    }
+    
+    void OnTriggerExit2D(Collider2D other)
+    {
+        parentScript.RecieveTriggerExit("playerCollider", other);
     }
 }

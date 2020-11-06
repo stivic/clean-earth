@@ -10,6 +10,7 @@ public class TeleportationOrb : MonoBehaviour
     public float duration;
     private GameObject player;
     public Rigidbody2D myRigidBody;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +38,7 @@ public class TeleportationOrb : MonoBehaviour
         player.transform.SetPositionAndRotation(ai.gameObject.transform.position, Quaternion.identity);
         ai.SetPositionAndRotation(temp, Quaternion.identity);
         SwapPlayerInfo(player.GetComponent<PlayerInfo>(), ai.GetComponent<PlayerInfo>());
+        SwapPlayerInventory(player.GetComponent<Inventory>(), ai.GetComponent<Inventory>());
     }
 
     private void SwapPlayerInfo(PlayerInfo p1, PlayerInfo p2)
@@ -46,6 +48,13 @@ public class TeleportationOrb : MonoBehaviour
         p1.SetKarma(p2.GetKarma());
         p2.SetKarma(temp);
         print("Karma: " + p1.GetKarma());
+    }
+
+    private void SwapPlayerInventory(Inventory i1, Inventory i2)
+    {
+        List<GameObject> temp = i1.inventory;
+        i1.inventory = i2.inventory;
+        i2.inventory = temp;
     }
 
     public void OnCollisionEnter2D(Collision2D other)

@@ -1,81 +1,96 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEditor.iOS;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
     //public static int inventoryNum = 10;
-    public GameObject[] inventory = new GameObject[10];
+    private static int inventorySize = 10;
+    public List<GameObject> inventory;
+    public static GameObject[] garbage;
     private PlayerInfo info;
+    private Transform player;
+    private float timeForNewItem = 120f;
    
     void Start()
     {
+        inventory = new List<GameObject>();
         info = GetComponent<PlayerInfo>();
+        garbage = Resources.LoadAll<GameObject>("Prefabs/Objects/Garbage");
+        player = GetComponent<Transform>();
+        InvokeRepeating("AddRandomItem", 30f, timeForNewItem);
     }
 
     public bool AddItem(GameObject item)
     {
-        bool isFull = true;
-        for(int i = 0; i<inventory.Length; i++)
+        if (inventory.Count < inventorySize)
         {
-            if (inventory[i] == null)
-            {
-                inventory[i] = item;
-                Debug.Log(item.name + " is added");
-                isFull = false;
-                item.SendMessage("DoInteraction");
-                info.IncreaseKarma();
-                break;
-            }
+            inventory.Add(item);
+            item.SetActive(false);
+            info.IncreaseKarma();
+            return true;
         }
-        if (isFull)
-        {
-            Debug.Log("Inventory is full");
-        }
-
-        return !isFull;
+        return false;
     }
     //za sada baca prvi item po redu iz inventory-a
     public void ThrowItem()
     {
-        if (isInventoryEmpty())
+        if (!inventory.Any())
         {
-            Debug.Log("Inventory is empty");
+            Debug.Log("Inventory is empty!");
         }
         else
         {
-            GameObject item = inventory[0];
+            int randomItem = Random.Range(0, inventory.Count);
+            GameObject item = inventory[randomItem];
+            
+            inventory.RemoveAt(randomItem);
             SpriteRenderer r = gameObject.GetComponent<SpriteRenderer>();
-            Debug.Log(r.sprite);
             //Debug.Log(gameObject.transform.position.x + " " + gameObject.transform.position.y + " " + item.transform.position.z);
             Vector3 newPosition = new Vector3((float)(gameObject.transform.position.x), (float)(gameObject.transform.position.y), item.transform.position.z);
             item.transform.position = newPosition;
             //item.SendMessage("Throw");
             item.SetActive(true);
-            info.DecreaseKarma();
-            GameObject[] inventoryTmp = new GameObject[10];
-            for(int i = 1; i<inventory.Length; i++)
+            if (info.insideTrashCanArea)
             {
-                inventoryTmp[i - 1] = inventory[i];
+                Destroy(item);
+                info.IncreaseKarma();
             }
-
-            inventory = inventoryTmp;
+            else
+            {
+                info.DecreaseKarma();
+            }
 
         }
     }
-
-    public bool isInventoryEmpty()
+    
+    public void AddRandomItem()
     {
-        
-        for (int i = 0; i < inventory.Length; i++)
+        int itemIndex = Random.Range (0, garbage.Length);
+        GameObject myObj = Instantiate (garbage [itemIndex]) as GameObject;
+        if (!AddItem(myObj))
         {
-            if (inventory[i] != null)
-            {
-                Debug.Log("Inventory ima nesto");
-                return false;
-            }
+            Destroy(myObj);
         }
-        Debug.Log("Inventory je prazan");
-        return true;
+
     }
+
+    public bool Empty()
+    {
+        return !inventory.Any();
+    }
+
+    public int Count()
+    {
+        return inventory.Count;
+    }
+
+    public int Size()
+    {
+        return inventorySize;
+    }
+    
 }
+

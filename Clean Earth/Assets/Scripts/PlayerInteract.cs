@@ -6,7 +6,14 @@ public class PlayerInteract : MonoBehaviour
 {
     public GameObject currentInterObj = null;
     public InteractionObject currentInterObjScript = null;
-    public Inventory inventoryScript;
+    private Inventory inventory;
+    private PlayerInfo info;
+
+    void Start()
+    {
+        info = GetComponent<PlayerInfo>();
+        inventory = GetComponent<Inventory>();
+    }
 
     public void Update()
     {
@@ -14,7 +21,7 @@ public class PlayerInteract : MonoBehaviour
         {
             if (currentInterObjScript.inventory)
             {
-                inventoryScript.AddItem(currentInterObj);
+                inventory.AddItem(currentInterObj);
             }
             
 
@@ -22,7 +29,7 @@ public class PlayerInteract : MonoBehaviour
         if (Input.GetButtonDown("InteractDown"))
         {
             Debug.Log("Krece bacati");
-            inventoryScript.ThrowItem();
+            inventory.ThrowItem();
         }
     }
     public void OnTriggerEnter2D(Collider2D collision)
@@ -33,6 +40,10 @@ public class PlayerInteract : MonoBehaviour
             currentInterObj = collision.gameObject;
             currentInterObjScript = currentInterObj.GetComponent<InteractionObject>();
 
+        }
+        else if(collision.CompareTag("trashCan"))
+        {
+            info.insideTrashCanArea = true;
         }
     }
 
@@ -45,6 +56,10 @@ public class PlayerInteract : MonoBehaviour
                 currentInterObj = null;
                 currentInterObjScript = null;
             }
+        }
+        else if (collision.CompareTag("trashCan"))
+        {
+            info.insideTrashCanArea = false;
         }
     }
 }

@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class AIBehaviour : MonoBehaviour
 {
@@ -9,6 +11,9 @@ public class AIBehaviour : MonoBehaviour
     private PlayerInfo info;
     private Inventory inventory;
     private bool collectObject = false;
+    private bool disposeGarbage = false;
+    private float randomDistance = 1f;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -32,11 +37,27 @@ public class AIBehaviour : MonoBehaviour
                     collectObject = true;
                     target.SetPositionAndRotation(other.gameObject.transform.position, Quaternion.identity);
                 }
-                else if(!inventory.isInventoryEmpty() && ThrowGarbage())
+                else if(!inventory.Empty() && ThrowGarbage())
                 {
                     Debug.Log("throwing garbage!");
                     inventory.ThrowItem();
                 }
+            }
+            else if (other.CompareTag("trashCan"))
+            {
+                Debug.Log("trash can!");
+                if (!inventory.Empty() && DisposeGarbage())
+                {
+                    Debug.Log("disposing garbage...");
+                    disposeGarbage = true;
+                    Vector3 randomOffset = new Vector3(Random.Range(-randomDistance, randomDistance), 
+                                                        Random.Range(-randomDistance, randomDistance),
+                                                        0);
+                    target.SetPositionAndRotation(other.gameObject.transform.position + randomOffset,
+                                                    Quaternion.identity);
+                    
+                }
+                
             }
         }
         else if(fromObject == "playerCollider"){
@@ -51,9 +72,34 @@ public class AIBehaviour : MonoBehaviour
                 }
                 
             }
+            else if (other.CompareTag("trashCan"))
+            {
+                info.insideTrashCanArea = true;
+                if (disposeGarbage)
+                {
+                    int numberOfItems = Random.Range(1, inventory.Count());
+                    for (int i=0; i<numberOfItems; i++)
+                    {
+                        inventory.ThrowItem();
+                    }
+                    Debug.Log("garbage disposed!");
+                    disposeGarbage = false;
+                }
+            }
         }
-    } 
-    
+    }
+
+    public void RecieveTriggerExit(string fromObject, Collider2D other)
+    {
+        if (fromObject == "playerCollider")
+        {
+            if (other.CompareTag("trashCan"))
+            {
+                info.insideTrashCanArea = false;
+            }
+        }
+    }
+
     private bool CollectGarbage()
     {
         return Random.Range(0f, 1f) <= info.GetKarma()/2f;
@@ -63,6 +109,11 @@ public class AIBehaviour : MonoBehaviour
     {
         return Random.Range(0f, 1f) <= (1-info.GetKarma())/2f;
     }
+    
+    private bool DisposeGarbage()
+    {
+        return Random.Range(0f, 1f) <= (info.GetKarma() / 2f) * (1 + inventory.Count() / inventory.Size());
 
+    }
     
 }

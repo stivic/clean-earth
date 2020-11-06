@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class PlayerInfo : MonoBehaviour
 {
+    public bool insideTrashCanArea = false;
     private float karma;
-
     private float karmaIncrease = 0.05f;
-
     private float karmaDecrease = 0.1f;
     // Start is called before the first frame update
     void Start()
@@ -24,7 +23,7 @@ public class PlayerInfo : MonoBehaviour
     {
         this.karma = karma;
     }
-    
+  
     public void IncreaseKarma()
     {
         karma += karmaIncrease;
