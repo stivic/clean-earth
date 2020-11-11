@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerInteract : MonoBehaviour
 {
     public GameObject currentInterObj = null;
-    public InteractionObject currentInterObjScript = null;
     private Inventory inventory;
     private PlayerInfo info;
 
@@ -19,7 +18,7 @@ public class PlayerInteract : MonoBehaviour
     {
         if (Input.GetButtonDown("InteractUp") &&  currentInterObj)
         {
-            if (currentInterObjScript.inventory)
+            //if (currentInterObjScript.inventory)
             {
                 inventory.AddItem(currentInterObj);
             }
@@ -38,8 +37,6 @@ public class PlayerInteract : MonoBehaviour
         {
             Debug.Log(collision.name);
             currentInterObj = collision.gameObject;
-            currentInterObjScript = currentInterObj.GetComponent<InteractionObject>();
-
         }
         else if(collision.CompareTag("trashCan"))
         {
@@ -54,7 +51,6 @@ public class PlayerInteract : MonoBehaviour
             if(collision.gameObject == currentInterObj)
             {
                 currentInterObj = null;
-                currentInterObjScript = null;
             }
         }
         else if (collision.CompareTag("trashCan"))

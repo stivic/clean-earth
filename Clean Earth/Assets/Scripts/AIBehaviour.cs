@@ -8,8 +8,8 @@ public class AIBehaviour : MonoBehaviour
 {
     public Transform target;
 
-    private PlayerInfo info;
-    private Inventory inventory;
+    public PlayerInfo info;
+    public Inventory inventory;
     private bool collectObject = false;
     private bool disposeGarbage = false;
     private float randomDistance = 1f;

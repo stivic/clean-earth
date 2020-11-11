@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.iOS;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Inventory : MonoBehaviour
 {
@@ -13,10 +15,14 @@ public class Inventory : MonoBehaviour
     private PlayerInfo info;
     private Transform player;
     private float timeForNewItem = 120f;
-   
+
+    private void Awake()
+    {
+        inventory = new List<GameObject>(inventorySize);
+    }
+
     void Start()
     {
-        inventory = new List<GameObject>();
         info = GetComponent<PlayerInfo>();
         garbage = Resources.LoadAll<GameObject>("Prefabs/Objects/Garbage");
         player = GetComponent<Transform>();

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerCollider : MonoBehaviour
 {
-    private AIBehaviour parentScript;
+    public AIBehaviour parentScript;
     void Start()
     {
         parentScript = transform.parent.GetComponent<AIBehaviour>();

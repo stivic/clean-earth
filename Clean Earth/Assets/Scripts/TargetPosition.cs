@@ -8,6 +8,11 @@ public class TargetPosition : MonoBehaviour
     public Transform aiPosition;
     private bool targetReached = false;
     public float maxWaitingPeriod;
+    public GameObject positionTester;
+    private float minY = -35f;
+    private float minX = -95f;
+    private float maxY = 115f;
+    private float maxX = 95f;
 
     // Start is called before the first frame update
     void Start()
@@ -29,10 +34,25 @@ public class TargetPosition : MonoBehaviour
     {
         targetReached = true;
         yield return new WaitForSeconds(Random.Range(0f, Random.Range(0f, maxWaitingPeriod)));
-        int x = Random.Range(-95, 95);
-        int y = Random.Range(-35, 115);
-        position.SetPositionAndRotation(new Vector3(x, y, 0), new Quaternion(0, 0, 0, 0));
+        position.SetPositionAndRotation(FindNewTarget(), Quaternion.identity);
         targetReached = false;
+    }
+
+    private Vector3 FindNewTarget()
+    {
+        float x = Random.Range(minX, maxX);
+        float y = Random.Range(minY, maxY);
+        Vector3 position = new Vector3(x, y, 0);
+        GameObject tester = Instantiate( positionTester, position, Quaternion.identity );
+        bool allClear = tester.GetComponent<PositionTester>().allClear;
+        Destroy(tester);
+        
+        if (allClear) 
+        {
+            return position;
+        }
+        print("nova meta.");
+        return FindNewTarget();
     }
 
 }
