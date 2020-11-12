@@ -6,8 +6,14 @@ public class PlayerInfo : MonoBehaviour
 {
     public bool insideTrashCanArea = false;
     private float karma;
-    private float karmaIncrease = 0.05f;
-    private float karmaDecrease = 0.1f;
+    private static Dictionary<string, float> karmaIncrease = new Dictionary<string, float>(){
+                                                                {"PlasticBottle(Clone)", 0.05f},
+                                                                {"Battery(Clone)", 0.07f}
+                                                            };
+    private static Dictionary<string, float> karmaDecrease = new Dictionary<string, float>(){
+                                                                {"PlasticBottle(Clone)", 0.1f},
+                                                                {"Battery(Clone)", 0.12f}
+                                                            };
     // Start is called before the first frame update
     void Start()
     {
@@ -24,15 +30,15 @@ public class PlayerInfo : MonoBehaviour
         this.karma = karma;
     }
   
-    public void IncreaseKarma()
+    public void IncreaseKarma(string garbageName, float coef = 1f)
     {
-        karma += karmaIncrease;
+        karma += karmaIncrease[garbageName]*coef;
         Mathf.Clamp(karma, 0f, 1f);
     }
     
-    public void DecreaseKarma()
+    public void DecreaseKarma(string garbageName, float coef = 1f)
     {
-        karma -= karmaDecrease;
+        karma -= karmaDecrease[garbageName]*coef;
         Mathf.Clamp(karma, 0f, 1f);
     }
 }

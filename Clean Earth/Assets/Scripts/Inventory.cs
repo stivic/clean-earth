@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.iOS;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class Inventory : MonoBehaviour
 {
-    //public static int inventoryNum = 10;
     private static int inventorySize = 10;
     public List<GameObject> inventory;
-    public static GameObject[] garbage;
+    private static GameObject[] _garbage;
     private PlayerInfo info;
-    private Transform player;
+    private float inTrashCoef = 0.5f;
     private float timeForNewItem = 120f;
 
     private void Awake()
@@ -24,9 +20,8 @@ public class Inventory : MonoBehaviour
     void Start()
     {
         info = GetComponent<PlayerInfo>();
-        garbage = Resources.LoadAll<GameObject>("Prefabs/Objects/Garbage");
-        player = GetComponent<Transform>();
-        InvokeRepeating("AddRandomItem", 30f, timeForNewItem);
+        _garbage = Resources.LoadAll<GameObject>("Prefabs/Objects/Garbage");
+        InvokeRepeating(nameof(AddRandomItem), 30f, timeForNewItem);
     }
 
     public bool AddItem(GameObject item)
@@ -35,7 +30,7 @@ public class Inventory : MonoBehaviour
         {
             inventory.Add(item);
             item.SetActive(false);
-            info.IncreaseKarma();
+            info.IncreaseKarma(item.name);
             return true;
         }
         return false;
@@ -45,28 +40,23 @@ public class Inventory : MonoBehaviour
     {
         if (!inventory.Any())
         {
-            Debug.Log("Inventory is empty!");
+            print("Inventory is empty!");
         }
         else
         {
             int randomItem = Random.Range(0, inventory.Count);
-            GameObject item = inventory[randomItem];
-            
+            GameObject item = inventory[Random.Range(0, inventory.Count)];
             inventory.RemoveAt(randomItem);
-            SpriteRenderer r = gameObject.GetComponent<SpriteRenderer>();
-            //Debug.Log(gameObject.transform.position.x + " " + gameObject.transform.position.y + " " + item.transform.position.z);
-            Vector3 newPosition = new Vector3((float)(gameObject.transform.position.x), (float)(gameObject.transform.position.y), item.transform.position.z);
-            item.transform.position = newPosition;
-            //item.SendMessage("Throw");
+            item.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
             item.SetActive(true);
             if (info.insideTrashCanArea)
             {
                 Destroy(item);
-                info.IncreaseKarma();
+                info.IncreaseKarma(item.name, inTrashCoef);
             }
             else
             {
-                info.DecreaseKarma();
+                info.DecreaseKarma(item.name);
             }
 
         }
@@ -74,13 +64,13 @@ public class Inventory : MonoBehaviour
     
     public void AddRandomItem()
     {
-        int itemIndex = Random.Range (0, garbage.Length);
-        GameObject myObj = Instantiate (garbage [itemIndex]) as GameObject;
-        if (!AddItem(myObj))
+        if (inventory.Count < inventorySize)
         {
-            Destroy(myObj);
+            int itemIndex = Random.Range (0, _garbage.Length);
+            GameObject item = Instantiate (_garbage [itemIndex]);
+            inventory.Add(item);
+            item.SetActive(false);
         }
-
     }
 
     public bool Empty()

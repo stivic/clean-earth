@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class WorldInit : MonoBehaviour
@@ -9,7 +8,7 @@ public class WorldInit : MonoBehaviour
     public uint aiNumber;
     public uint playerNumber;
     public GameObject trashCan;
-    public GameObject garbage;
+    public List<GameObject> garbage;
     public GameObject ai;
     public GameObject player;
     public GameObject positionTester;
@@ -29,7 +28,7 @@ public class WorldInit : MonoBehaviour
         
         for (int i = 0; i < garbageNumber; i++)
         {
-            Instantiate(garbage, FindNewTarget(), Quaternion.identity);
+            Instantiate(garbage[Random.Range(0, garbage.Count)], FindNewTarget(), Quaternion.identity);
         }
         
         for (int i = 0; i < trashCanNumber; i++)
@@ -41,12 +40,6 @@ public class WorldInit : MonoBehaviour
         {
             Instantiate(player, FindNewTarget(), Quaternion.identity);
         }
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
         
     }
     
