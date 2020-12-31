@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
+using Photon.Pun;
 
-public class AIMovement : MonoBehaviour
+public class AIMovement : MonoBehaviourPun
 {
     
     private Animator animator;
@@ -24,17 +25,21 @@ public class AIMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        direction = aiPath.desiredVelocity;
-        if (direction != Vector2.zero)
+        if (photonView.IsMine)
         {
-            direction = direction.normalized;
-            animator.SetFloat(MoveX, direction.x);
-            animator.SetFloat(MoveY, direction.y);
-            animator.SetBool(Moving, true);
+            direction = aiPath.desiredVelocity;
+            if (direction != Vector2.zero)
+            {
+                direction = direction.normalized;
+                animator.SetFloat(MoveX, direction.x);
+                animator.SetFloat(MoveY, direction.y);
+                animator.SetBool(Moving, true);
+            }
+            else
+            {
+                animator.SetBool(Moving, false);
+            }
         }
-        else
-        {
-            animator.SetBool(Moving, false);
-        }
+        
     }
 }

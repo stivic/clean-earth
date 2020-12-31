@@ -1,17 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class PlayerInteract : MonoBehaviour
+public class PlayerInteract : MonoBehaviourPun
 {
-    public GameObject currentInterObj = null;
-    private Inventory inventory;
-    private PlayerInfo info;
+    private GameObject currentInterObj = null;
+    
+    public Inventory inventory;
+    public PlayerInfo info;
+    
 
     void Start()
     {
+        
         info = GetComponent<PlayerInfo>();
         inventory = GetComponent<Inventory>();
+        
     }
 
     public void Update()
@@ -20,6 +25,7 @@ public class PlayerInteract : MonoBehaviour
         {
             //if (currentInterObjScript.inventory)
             {
+                currentInterObj.GetPhotonView().RequestOwnership();
                 inventory.AddItem(currentInterObj);
             }
             
@@ -30,6 +36,11 @@ public class PlayerInteract : MonoBehaviour
             Debug.Log("Krece bacati");
             inventory.ThrowItem();
         }
+
+        DisplayUI.Instance.karma = info.GetKarma();
+        DisplayUI.Instance.inventoryCount = inventory.Count();
+
+
     }
     public void OnTriggerEnter2D(Collider2D collision)
     {
@@ -46,6 +57,10 @@ public class PlayerInteract : MonoBehaviour
 
     public void OnTriggerExit2D(Collider2D collision)
     {
+        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
+        {
+            return;
+        }
         if (collision.CompareTag("interactObject"))
         {
             if(collision.gameObject == currentInterObj)
@@ -58,4 +73,5 @@ public class PlayerInteract : MonoBehaviour
             info.insideTrashCanArea = false;
         }
     }
+    
 }

@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections;
-using UnityEditor.iOS;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
+
 
 public enum PlayerState
 {
 	walk, 
 	teleport
 }
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviourPunCallbacks, IPunObservable
 {
-
+	public static GameObject LocalPlayerInstance;
 	public PlayerState currentState;
 	public float speed;
 	private Rigidbody2D myRigidbody;
@@ -25,19 +27,46 @@ public class PlayerMovement : MonoBehaviour
 	private static readonly int Moving = Animator.StringToHash("moving");
 
 	// Start is called before the first frame update
-    private void Start()
+	private void Awake()
+	{
+		if (photonView.IsMine)
+		{
+			PlayerMovement.LocalPlayerInstance = this.gameObject;
+		}
+		// #Critical
+		// we flag as don't destroy on load so that instance survives level synchronization, thus giving a seamless experience when levels load.
+		DontDestroyOnLoad(this.gameObject);
+	}
+
+	private void Start()
     {
 	    animator = GetComponent<Animator>();
 	    myRigidbody = GetComponent<Rigidbody2D>();
 	    currentState = PlayerState.walk;
 	    animator.SetFloat(MoveX, 0);
 	    animator.SetFloat(MoveY, -1);
+	    CameraWork _cameraWork = this.gameObject.GetComponent<CameraWork>();
+	    if (_cameraWork != null)
+	    {
+		    if (photonView.IsMine)
+		    {
+			    _cameraWork.OnStartFollowing();
+		    }
+	    }
+	    else
+	    {
+		    Debug.LogError("<Color=Red><a>Missing</a></Color> CameraWork Component on playerPrefab.", this);
+	    }
     }
 
     // Update is called once per frame
 
     private void Update()
     {
+	    if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
+	    {
+		    return;
+	    }
 	    change = Vector3.zero;
 	    change.x = Input.GetAxisRaw("Horizontal");
 	    change.y = Input.GetAxisRaw("Vertical");
@@ -49,7 +78,11 @@ public class PlayerMovement : MonoBehaviour
     }
     private void FixedUpdate()
     {
-	    UpdateAnimationAndMove();
+	    if (photonView.IsMine)
+	    {
+		    UpdateAnimationAndMove();
+	    }
+	    
     }
 
     private void UpdateAnimationAndMove()
@@ -91,8 +124,25 @@ public class PlayerMovement : MonoBehaviour
 		    Instantiate(teleportationOrb, transform.position, Quaternion.identity).GetComponent<TeleportationOrb>();
 	    projectile.Setup(temp);
     }
-    
-    
+
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+	    if (stream.IsWriting)
+	    {
+		    // We own this player: send the others our data
+		    stream.SendNext(currentState==PlayerState.teleport);
+	    }
+	    else
+	    {
+		    // Network player, receive data
+		    if ((bool) stream.ReceiveNext())
+		    {
+			    this.currentState = PlayerState.teleport;
+		    }
+		    
+	    }
+    }
 }
 
 	

@@ -21,12 +21,6 @@ public class AIBehaviour : MonoBehaviour
         info = GetComponent<PlayerInfo>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void RecieveTriggerEnter(string fromObject, Collider2D other){
         if(fromObject == "distanceCollider"){
             if (other.CompareTag("interactObject")) {
@@ -57,8 +51,17 @@ public class AIBehaviour : MonoBehaviour
                                                     Quaternion.identity);
                     
                 }
-                
             }
+            else if (other.CompareTag("Player"))
+            {
+                Debug.Log("other player!");
+                if (!inventory.Empty() && info.GetKarma() <= 0.1)
+                {
+                    Debug.Log("throwing garbage!");
+                    inventory.ThrowItem();
+                }
+            }
+            
         }
         else if(fromObject == "playerCollider"){
             if (other.CompareTag("interactObject")) {

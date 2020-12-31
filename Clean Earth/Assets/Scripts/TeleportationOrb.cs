@@ -8,6 +8,7 @@ public class TeleportationOrb : MonoBehaviour
 {
     public float speed;
     public float duration;
+    public bool isActive = false;
     private GameObject player;
     public Rigidbody2D myRigidBody;
     
@@ -19,15 +20,17 @@ public class TeleportationOrb : MonoBehaviour
 
     public void Setup(Vector2 velocity)
     {
+        isActive = true;
         myRigidBody.velocity = velocity.normalized * speed;
-        Destroy(this.gameObject, duration);
+        Destroy(gameObject, duration);
     }
 
     public void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
+            isActive = false;
             SwapPlayers(other.transform.parent.GetComponent<Transform>());
         }
     }
@@ -52,16 +55,14 @@ public class TeleportationOrb : MonoBehaviour
 
     private void SwapPlayerInventory(Inventory i1, Inventory i2)
     {
-        List<GameObject> temp = i1.inventory;
+        List<String> temp = i1.inventory;
         i1.inventory = i2.inventory;
         i2.inventory = temp;
     }
 
     public void OnCollisionEnter2D(Collision2D other)
     {
-        Destroy(this.gameObject);
+        isActive = false;
+        Destroy(gameObject);
     }
-
-   
-
 }

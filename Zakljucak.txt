@@ -1,0 +1,4 @@
+Zaključak
+
+
+Tijekom razvoja ovog projekta upoznali smo se sa Unity game engine-om i suočili se raznim problemima specifičnim za razvoj igara. Najviše problema imali smo sa smišljanjem logike same igre koja bi igru trebala čini zabavnom, a istovremeno poučnom što uistinu nije lak zadatak. Možemo reći da u ostvarenju svog cilja nismo uspjeli i da imamo još dosta posla, ali vjerojatno smo na dobrom putu. Za sad smo napravili prototip igre i zajedno sa znanjem kojeg smo stekli to čini dobru bazu za daljni rad na ovom projektu. Neka od potrebnih poboljšanja su: izrada vlastitih modela i animacija, balansiranje igre, unošenje novih zabavnih elemenata i dodavanje zvučnih efekata. Mislimo da ovaj projekt ima dosta potencijala zato što je očuvanje Zemlje jedan od većih problema današnjice, a nema mnogo igara koje se bave tom tematikom. S više cvijeća manje smeća.

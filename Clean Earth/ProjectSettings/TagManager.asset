@@ -8,6 +8,8 @@ TagManager:
   - teleportationOrb
   - interactObject
   - trashCan
+  - Bullet
+  - Minimap
   layers:
   - Default
   - TransparentFX
@@ -21,8 +23,8 @@ TagManager:
   - TeleportationOrb
   - AI
   - Player
-  - 
-  - 
+  - Both
+  - Minimap
   - 
   - 
   - 
