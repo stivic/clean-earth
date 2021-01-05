@@ -130,6 +130,7 @@ namespace CleanEarth
         public void LeaveRoom()
         {
             PhotonNetwork.LeaveRoom();
+            PhotonNetwork.LoadLevel("Launcher");
         }
 
 

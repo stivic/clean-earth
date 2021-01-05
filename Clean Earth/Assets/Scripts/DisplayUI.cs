@@ -33,7 +33,7 @@ public class DisplayUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        karmaLabel.text = "Karma: " + karma;
-        inventoryLabel.text = "Inventory: " + inventoryCount;
+        //karmaLabel.text = "Karma: " + karma;
+        //inventoryLabel.text = "Inventory: " + inventoryCount;
     }
 }

@@ -314,8 +314,8 @@ InputManager:
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: e
-    altNegativeButton: 
+    positiveButton: left shift
+    altNegativeButton: right shift
     altPositiveButton: joystick button 1
     gravity: 1000
     dead: 0.001
@@ -327,6 +327,22 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: InteractDown
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: left cmd
+    altNegativeButton: right cmd
+    altPositiveButton: joystick button 1
+    gravity: 1000
+    dead: 0.001
+    sensitivity: 1000
+    snap: 0
+    invert: 0
+    type: 0
+    axis: 0
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: Report
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 

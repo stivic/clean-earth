@@ -830,6 +830,20 @@
             </e>
           </e>
         </e>
+        <e p="Resources" t="Include">
+          <e p="Prefabs" t="Include">
+            <e p="UI" t="Include">
+              <e p="Fonts" t="Include">
+                <e p="Do_Hyeon" t="Include">
+                  <e p="OFL.txt" t="Include" />
+                </e>
+                <e p="Langar" t="Include">
+                  <e p="OFL.txt" t="Include" />
+                </e>
+              </e>
+            </e>
+          </e>
+        </e>
         <e p="Scripts" t="Include">
           <e p="AIBehaviour.cs" t="Include" />
           <e p="AIMovement.cs" t="Include" />
@@ -852,6 +866,7 @@
           <e p="PositionTester.cs" t="Include" />
           <e p="TargetPosition.cs" t="Include" />
           <e p="TeleportationOrb.cs" t="Include" />
+          <e p="Timer.cs" t="Include" />
           <e p="WorldInit.cs" t="Include" />
         </e>
         <e p="Tiled2Unity" t="Include">

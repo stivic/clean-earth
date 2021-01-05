@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IPunObservable
 	private Animator animator;
 	public GameObject teleportationOrb;
 	private TeleportationOrb projectile;
-	
+
 	// Cached property indexes
 	private static readonly int MoveX = Animator.StringToHash("moveX");
 	private static readonly int MoveY = Animator.StringToHash("moveY");
@@ -73,6 +73,20 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IPunObservable
 	    if (Input.GetButtonDown("Teleport") && currentState != PlayerState.teleport)
 	    {
 		    StartCoroutine(TeleportCo());
+	    }
+	    if (Input.GetButtonDown("Report"))
+	    {
+		    WorldInit.Instance.currentReportCount--;
+		    if (this.GetComponent<PlayerInfo>().wasBadGuy)
+		    {
+			    
+			    Destroy(WorldInit.Instance.badAIPlayers[WorldInit.Instance.badAIPlayers.Count-1]);
+		    }
+		    else if (WorldInit.Instance.currentReportCount < WorldInit.Instance.badAIPlayers.Count)
+		    {
+			    // Game Over
+		    }
+				
 	    }
 
     }

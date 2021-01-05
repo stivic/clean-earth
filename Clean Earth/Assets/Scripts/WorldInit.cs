@@ -13,11 +13,18 @@ public class WorldInit : MonoBehaviourPunCallbacks
     public List<GameObject> garbage;
     public GameObject positionTester;
     public List<Transform> aiPlayers;
+    public List<GameObject> badAIPlayers;
     
     private const float minY = -100f;
     private const float minX = -100f;
     private const float maxY = 100f;
     private const float maxX = 90f;
+
+    public uint allowedGarbageCount;
+    public uint currentGarbageCount = 0;
+    public uint currentReportCount = 0;
+
+    
     
     private static WorldInit _instance;
     public static WorldInit Instance { get { return _instance; } }
@@ -79,8 +86,7 @@ public class WorldInit : MonoBehaviourPunCallbacks
             if (ai.name.EndsWith("(Clone)"))
             {
                 ai.name = ai.name.Remove(ai.name.Length - 7);
-            } 
-            
+            }
             aiPlayers.Add(ai.GetComponentInChildren<Transform>().Find("AIPlayer"));
         }
     }
@@ -95,6 +101,7 @@ public class WorldInit : MonoBehaviourPunCallbacks
             {
                 badAI.name = badAI.name.Remove(badAI.name.Length - 7);
             }
+            badAIPlayers.Add(badAI);
         }
     }
 
@@ -109,6 +116,8 @@ public class WorldInit : MonoBehaviourPunCallbacks
             {
                 item.name = item.name.Remove(item.name.Length - 7);
             }
+
+            currentGarbageCount++;
         }
     }
     

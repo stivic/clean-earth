@@ -89,8 +89,8 @@ public class CameraWork : MonoBehaviour
 		{	      
 			cameraTransform = Camera.main.transform;
 			isFollowing = true;
-			// we don't smooth anything, we go straight to the right camera shot
-			Cut();
+			
+			Follow();
 		}
 		
 		#endregion
