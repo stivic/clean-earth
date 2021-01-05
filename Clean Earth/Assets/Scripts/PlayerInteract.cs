@@ -37,8 +37,7 @@ public class PlayerInteract : MonoBehaviourPun
             inventory.ThrowItem();
         }
 
-        DisplayUI.Instance.karma = info.GetKarma();
-        DisplayUI.Instance.inventoryCount = inventory.Count();
+        
 
 
     }

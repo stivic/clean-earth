@@ -10,6 +10,9 @@ TagManager:
   - trashCan
   - Bullet
   - Minimap
+  - waveText
+  - showOnFinish
+  - showOnPlay
   layers:
   - Default
   - TransparentFX

@@ -10,7 +10,7 @@ using Random = UnityEngine.Random;
 
 public class Inventory : MonoBehaviourPun
 {
-    private static int inventorySize = 10;
+    public static int inventorySize = 10;
     public List<String> inventory;
     private static GameObject[] _garbage;
     private PlayerInfo info;
