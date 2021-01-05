@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 7533426186035719212}
   - component: {fileID: 5765122954251451903}
   - component: {fileID: 4319442746691440355}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Player
   m_TagString: myself
   m_Icon: {fileID: 0}
@@ -83,7 +83,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 7
   m_Sprite: {fileID: 7152930139536384079, guid: 34d31f7320da84b4aac7539ac652dfbd,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
-  speed: 5
+  speed: 8
   teleportationOrb: {fileID: 5697214123415733237, guid: eff5627c924604035b76a99c83d01946,
     type: 3}
 --- !u!95 &4624264430203505878
@@ -206,6 +206,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0407f86f0f699440399449d87d5f6e53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isBadGuy: 0
+  wasBadGuy: 0
   insideTrashCanArea: 0
 --- !u!114 &-1093365062019818363
 MonoBehaviour:
@@ -413,7 +415,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 219042417
   m_SortingLayer: 1
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_Sprite: {fileID: 3125261286801977513, guid: 8a6cd262f7b3041129788fd260de4392,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

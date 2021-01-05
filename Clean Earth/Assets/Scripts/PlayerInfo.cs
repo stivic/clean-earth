@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Net.Configuration;
 using UnityEngine;
 
 public class PlayerInfo : MonoBehaviour
 {
+    public bool isBadGuy = false;
+    public bool wasBadGuy = false;
     public bool insideTrashCanArea = false;
     private float karma;
     private static Dictionary<string, float> karmaIncrease = new Dictionary<string, float>(){

@@ -9,6 +9,7 @@ public class PositionTester : MonoBehaviour
     // Start is called before the first frame update
     private void OnCollisionEnter2D(Collision2D other)
     {
+        Debug.Log("Nije clear.");
         allClear = false;
     }
 

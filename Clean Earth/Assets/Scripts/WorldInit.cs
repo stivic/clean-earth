@@ -8,15 +8,16 @@ public class WorldInit : MonoBehaviourPunCallbacks
     public uint trashCanStartNumber;
     public uint garbageStartNumber;
     public uint aiStartNumber;
+    public uint badAIStartNumber;
     public GameObject trashCan;
     public List<GameObject> garbage;
-    public GameObject ai;
     public GameObject positionTester;
+    public List<Transform> aiPlayers;
     
     private const float minY = -100f;
     private const float minX = -100f;
     private const float maxY = 100f;
-    private const float maxX = 100f;
+    private const float maxX = 90f;
     
     private static WorldInit _instance;
     public static WorldInit Instance { get { return _instance; } }
@@ -33,25 +34,37 @@ public class WorldInit : MonoBehaviourPunCallbacks
 
     public Vector3 FindNewTarget()
     {
-        
         float x = Random.Range(minX, maxX);
         float y = Random.Range(minY, maxY);
         Vector3 position = new Vector3(x, y, 0);
+        
+        Collider2D[] colliders = new Collider2D[100];
+        ContactFilter2D contact = new ContactFilter2D();
+        contact.useLayerMask = true;
+        contact.useTriggers = false;
+        contact.SetLayerMask(LayerMask.GetMask("Collision"));
+        
         GameObject tester = Instantiate( positionTester, position, Quaternion.identity );
-        bool allClear = tester.GetComponent<PositionTester>().allClear;
+
+        bool allClear =
+            Physics2D.OverlapCollider(tester.GetComponent<CircleCollider2D>(), contact, colliders) == 0;
         Destroy(tester);
+        
+        
         
         if (allClear) 
         {
+            Debug.Log("Iz prve.");
             return position;
         }
-        print("nova meta.");
+        Debug.Log("nova meta.");
         return FindNewTarget();
     }
 
-    public void SpawnObjects()
+    public void SpawnObjectsOnStart()
     {
         SpawnAI(aiStartNumber);
+        SpawnBadAI(badAIStartNumber);
         SpawnGarbage(garbageStartNumber);
         SpawnTrashCans(trashCanStartNumber);
     }
@@ -66,7 +79,22 @@ public class WorldInit : MonoBehaviourPunCallbacks
             if (ai.name.EndsWith("(Clone)"))
             {
                 ai.name = ai.name.Remove(ai.name.Length - 7);
-            }   
+            } 
+            
+            aiPlayers.Add(ai.GetComponentInChildren<Transform>().Find("AIPlayer"));
+        }
+    }
+
+    public void SpawnBadAI(uint badAINumber)
+    {
+        for (int i = 0; i < badAINumber; i++)
+        {
+            Debug.Log("Spawning AI");
+            GameObject badAI = PhotonNetwork.Instantiate(Path.Combine("Prefabs/People", "BadAI"), FindNewTarget(), Quaternion.identity);
+            if (badAI.name.EndsWith("(Clone)"))
+            {
+                badAI.name = badAI.name.Remove(badAI.name.Length - 7);
+            }
         }
     }
 

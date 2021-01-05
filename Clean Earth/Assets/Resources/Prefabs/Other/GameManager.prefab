@@ -58,9 +58,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cb58d2d43b1a4bd888c264791bbd074, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trashCanNumber: 10
-  garbageNumber: 20
-  aiNumber: 10
+  trashCanStartNumber: 0
+  garbageStartNumber: 0
+  aiStartNumber: 0
   trashCan: {fileID: 5075225062817134807, guid: 5d24064a15e73449ca229d54f53b8d11,
     type: 3}
   garbage:

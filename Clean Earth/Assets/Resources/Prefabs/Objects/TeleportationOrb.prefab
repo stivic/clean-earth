@@ -73,7 +73,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 4
   m_Sprite: {fileID: 5955781087917997448, guid: 15d28f72c5a7d433abecb13b95dd417b,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -137,6 +137,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   duration: 2.2
+  isActive: 0
   myRigidBody: {fileID: -4323509958931972019}
 --- !u!95 &3870036023974500457
 Animator:

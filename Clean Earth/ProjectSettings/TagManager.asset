@@ -10,6 +10,7 @@ TagManager:
   - trashCan
   - Bullet
   - Minimap
+  - BadGuy
   layers:
   - Default
   - TransparentFX
@@ -21,8 +22,8 @@ TagManager:
   - 
   - Collision
   - TeleportationOrb
-  - AI
-  - Player
+  - Interaction
+  - 
   - Both
   - Minimap
   - 

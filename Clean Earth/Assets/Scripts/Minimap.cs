@@ -1,38 +1,42 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Realtime;
 using UnityEngine;
 
 public class Minimap : MonoBehaviour
 {
     Transform cameraTransform;
-    private const float minY = -100f;
-    private const float minX = -100f;
-    private const float maxY = 100f;
+    private Transform playerTransform;
+    private const float minY = -103f;
+    private const float minX = -112f;
+    private const float maxY = 103f;
 
-    private const float maxX = 100f;
+    private const float maxX = 97f;
 
     // Start is called before the first frame update
     void Start()
     {
+        playerTransform =  GameObject.FindGameObjectsWithTag("myself")[0].transform;
+        
         cameraTransform = GameObject.FindGameObjectWithTag("Minimap").transform;
         Debug.Log("Camera tr: " + cameraTransform.position);
     }
 
     void LateUpdate()
     {
-        int cameraSize = 100;
+        int cameraSize = 50;
 
-        Vector3 newPosition = this.transform.position;
+        Vector3 newPosition = playerTransform.position;
         newPosition.z = cameraTransform.position.z;
-        Debug.Log("Pozicija igraca:" + this.transform.position);
+        Debug.Log("Pozicija igraca:" + playerTransform.position);
 
-        if( (this.transform.position.x + cameraSize) > maxX | (this.transform.position.x - cameraSize) < minX )
+        if( (playerTransform.position.x + cameraSize) > maxX | (playerTransform.position.x - cameraSize) < minX )
         { 
             newPosition.x = cameraTransform.position.x;
         }
 
-        if( (this.transform.position.y + cameraSize) > maxY | (this.transform.position.y - cameraSize) < minY )
+        if( (playerTransform.position.y + cameraSize) > maxY | (playerTransform.position.y - cameraSize) < minY )
         { 
             newPosition.y = cameraTransform.position.y;
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
-
-
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -21,7 +20,7 @@ namespace CleanEarth
         public static GameManager Instance { get { return _instance; } }
 
         [Tooltip("The prefab to use for representing the player")]
-        public GameObject playerPrefab;
+        private GameObject playerPrefab;
 
         #endregion
 
@@ -39,35 +38,23 @@ namespace CleanEarth
 
         void Start()
         {
-            if (playerPrefab == null)
-            {
-                Debug.LogError(
-                    "<Color=Red><a>Missing</a></Color> playerPrefab Reference. Please set it up in GameObject 'Game Manager'",
-                    this);
+            Debug.LogFormat("We are Instantiating LocalPlayer from {0}", Application.loadedLevelName);
+            // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
+            if (PlayerMovement.LocalPlayerInstance == null) {
+                Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManagerHelper.ActiveSceneName);
+                // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
+                PhotonNetwork.Instantiate(Path.Combine("Prefabs/People", "Player"), new Vector3(0f, 0f, 0f), Quaternion.identity); 
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    WorldInit.Instance.SpawnObjectsOnStart();
+                }
+                        
             }
             else
             {
-                Debug.LogFormat("We are Instantiating LocalPlayer from {0}", Application.loadedLevelName);
-                // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
-                if (PlayerMovement.LocalPlayerInstance == null)
-                {
-                    Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManagerHelper.ActiveSceneName);
-                    // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
-                    PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 0f, 0f), Quaternion.identity);
-                    if (PhotonNetwork.IsMasterClient)
-                    {
-                        WorldInit.Instance.SpawnObjects();
-                    }
-                        
-                }
-                else
-                {
-                    Debug.LogFormat("Ignoring scene load for {0}", SceneManagerHelper.ActiveSceneName);
-                }
-                
-                
-                
+                Debug.LogFormat("Ignoring scene load for {0}", SceneManagerHelper.ActiveSceneName);
             }
+
         }
 
         #endregion

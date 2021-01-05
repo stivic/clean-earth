@@ -51,6 +51,7 @@ public class PlayerInteract : MonoBehaviourPun
         }
         else if(collision.CompareTag("trashCan"))
         {
+            Debug.Log("unutar smeca.");
             info.insideTrashCanArea = true;
         }
     }

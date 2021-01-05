@@ -7,7 +7,6 @@ using Random = UnityEngine.Random;
 public class AIBehaviour : MonoBehaviour
 {
     public Transform target;
-
     public PlayerInfo info;
     public Inventory inventory;
     private bool collectObject = false;
@@ -19,6 +18,43 @@ public class AIBehaviour : MonoBehaviour
     {
         inventory = GetComponent<Inventory>();
         info = GetComponent<PlayerInfo>();
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("interactObject")) {
+            if (collectObject)
+            {
+                if (inventory.AddItem(other.gameObject))
+                {
+                    Debug.Log("garbage collected!");
+                }
+                collectObject = false;
+            }
+                
+        }
+        else if (other.CompareTag("trashCan"))
+        {
+            info.insideTrashCanArea = true;
+            if (disposeGarbage)
+            {
+                int numberOfItems = Random.Range(1, inventory.Count());
+                for (int i=0; i<numberOfItems; i++)
+                {
+                    inventory.ThrowItem();
+                }
+                Debug.Log("garbage disposed!");
+                disposeGarbage = false;
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("trashCan"))
+        {
+            info.insideTrashCanArea = false;
+        }
     }
 
     public void RecieveTriggerEnter(string fromObject, Collider2D other){
@@ -63,45 +99,9 @@ public class AIBehaviour : MonoBehaviour
             }
             
         }
-        else if(fromObject == "playerCollider"){
-            if (other.CompareTag("interactObject")) {
-                if (collectObject)
-                {
-                    if (inventory.AddItem(other.gameObject))
-                    {
-                        Debug.Log("garbage collected!");
-                    }
-                    collectObject = false;
-                }
-                
-            }
-            else if (other.CompareTag("trashCan"))
-            {
-                info.insideTrashCanArea = true;
-                if (disposeGarbage)
-                {
-                    int numberOfItems = Random.Range(1, inventory.Count());
-                    for (int i=0; i<numberOfItems; i++)
-                    {
-                        inventory.ThrowItem();
-                    }
-                    Debug.Log("garbage disposed!");
-                    disposeGarbage = false;
-                }
-            }
-        }
     }
 
-    public void RecieveTriggerExit(string fromObject, Collider2D other)
-    {
-        if (fromObject == "playerCollider")
-        {
-            if (other.CompareTag("trashCan"))
-            {
-                info.insideTrashCanArea = false;
-            }
-        }
-    }
+    
 
     private bool CollectGarbage()
     {

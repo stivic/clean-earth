@@ -34,25 +34,10 @@ public class TargetPosition : MonoBehaviour
     {
         targetReached = true;
         yield return new WaitForSeconds(Random.Range(0f, Random.Range(0f, maxWaitingPeriod)));
-        position.SetPositionAndRotation(FindNewTarget(), Quaternion.identity);
+        position.SetPositionAndRotation(WorldInit.Instance.FindNewTarget(), Quaternion.identity);
         targetReached = false;
     }
 
-    private Vector3 FindNewTarget()
-    {
-        float x = Random.Range(minX, maxX);
-        float y = Random.Range(minY, maxY);
-        Vector3 position = new Vector3(x, y, 0);
-        GameObject tester = Instantiate( positionTester, position, Quaternion.identity );
-        bool allClear = tester.GetComponent<PositionTester>().allClear;
-        Destroy(tester);
-        
-        if (allClear) 
-        {
-            return position;
-        }
-        print("nova meta.");
-        return FindNewTarget();
-    }
+    
 
 }

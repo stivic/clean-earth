@@ -833,6 +833,7 @@
         <e p="Scripts" t="Include">
           <e p="AIBehaviour.cs" t="Include" />
           <e p="AIMovement.cs" t="Include" />
+          <e p="BadAIBehaviour.cs" t="Include" />
           <e p="CameraMovement.cs" t="Include" />
           <e p="CameraWork.cs" t="Include" />
           <e p="DisplayUI.cs" t="Include" />
@@ -860,6 +861,7 @@
             <e p="World-1-100x100_2px.tiled2unity.xml" t="Include" />
             <e p="World-1-100x100px.tiled2unity.xml" t="Include" />
             <e p="World-BaseChip.tiled2unity.xml" t="Include" />
+            <e p="World-Left-Down-100x100.tiled2unity.xml" t="Include" />
             <e p="World-Left-Down-100x100_2px.tiled2unity.xml" t="Include" />
             <e p="World-Left-Up-100x100tiles.tiled2unity.xml" t="Include" />
             <e p="World-Right-Down-100x100tiles.tiled2unity.xml" t="Include" />
