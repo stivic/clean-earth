@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
-  speed: 8
+  speed: 6
   teleportationOrb: {fileID: 5697214123415733237, guid: eff5627c924604035b76a99c83d01946,
     type: 3}
 --- !u!95 &4624264430203505878

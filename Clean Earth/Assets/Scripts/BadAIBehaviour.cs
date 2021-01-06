@@ -23,7 +23,7 @@ public class BadAIBehaviour : MonoBehaviour
     
     void ThrowGarbage()
     {
-        float randomTime = Random.Range(15f, 45f);
+        float randomTime = Random.Range(10f, 30f);
         if (!inventory.Empty())
         {
             inventory.ThrowItem();
@@ -34,7 +34,7 @@ public class BadAIBehaviour : MonoBehaviour
     
     void GetRandomGarbage()
     {
-        float randomTime = Random.Range(20f, 60f);
+        float randomTime = Random.Range(10f, 30f);
         if (!inventory.Empty())
         {
             inventory.ThrowItem();

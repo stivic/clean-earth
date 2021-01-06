@@ -50,11 +50,21 @@ public class Launcher : MonoBehaviourPunCallbacks
         /// <summary>
         /// MonoBehaviour method called on GameObject by Unity during early initialization phase.
         /// </summary>
-        void Awake()
+       
+        private static Launcher _instance;
+        public static Launcher Instance { get { return _instance; } }
+    
+        private void Awake()
         {
-            // #Critical
-            // this makes sure we can use PhotonNetwork.LoadLevel() on the master client and all clients in the same room sync their level automatically
             PhotonNetwork.AutomaticallySyncScene = true;
+            
+            if (_instance != null && _instance != this)
+            {
+                Destroy(this.gameObject);
+            } else {
+                _instance = this;
+            
+            }
         }
 
 
@@ -97,6 +107,8 @@ public class Launcher : MonoBehaviourPunCallbacks
                 PhotonNetwork.GameVersion = gameVersion;
             }
         }
+        
+        
 
 
     #endregion

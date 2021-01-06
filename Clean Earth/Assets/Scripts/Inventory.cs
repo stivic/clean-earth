@@ -57,7 +57,8 @@ public class Inventory : MonoBehaviourPun
             if (item.GetPhotonView().Owner.UserId == PhotonNetwork.LocalPlayer.UserId)
             {
                 inventory.Add(item.name);
-                info.IncreaseKarma(item.name);    
+                info.IncreaseKarma(item.name);
+                WorldInit.Instance.currentGarbageCount--;
                 PhotonNetwork.Destroy(item);
             }
             
@@ -101,6 +102,7 @@ public class Inventory : MonoBehaviourPun
             else
             {
                 info.DecreaseKarma(item.name);
+                WorldInit.Instance.currentGarbageCount++;
             }
 
         }

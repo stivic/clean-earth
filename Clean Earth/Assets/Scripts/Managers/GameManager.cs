@@ -46,7 +46,12 @@ namespace CleanEarth
                 PhotonNetwork.Instantiate(Path.Combine("Prefabs/People", "Player"), new Vector3(0f, 0f, 0f), Quaternion.identity); 
                 if (PhotonNetwork.IsMasterClient)
                 {
+                    WorldInit.Instance.score = 0;
                     WorldInit.Instance.SpawnObjectsOnStart();
+                    WorldInit.Instance.allowedGarbageDecrease = WorldInit.Instance.waveNumber;
+                    WorldInit.Instance.allowedGarbageCount = WorldInit.Instance.garbageStartNumber;
+                    WorldInit.Instance.TimeTillNewRestriction();
+                    
                 }
                         
             }
@@ -97,7 +102,7 @@ namespace CleanEarth
                     PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
 
 
-                LoadArena();
+                //LoadArena();
             }
         }
 
@@ -129,8 +134,8 @@ namespace CleanEarth
 
         public void LeaveRoom()
         {
+            PhotonNetwork.DestroyPlayerObjects(PhotonNetwork.LocalPlayer);
             PhotonNetwork.LeaveRoom();
-            PhotonNetwork.LoadLevel("Launcher");
         }
 
 

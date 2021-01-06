@@ -46,6 +46,12 @@ public class CameraWork : MonoBehaviour
 		// Cache for camera offset
 		Vector3 cameraOffset = Vector3.zero;
 		
+		private const float minY = -101f;
+		private const float minX = -104f; //manji broj
+		private const float maxY = 99f; 
+		private const float maxX = 90f;
+		private const int cameraSize = 5;
+		
 		
         #endregion
 	#region MonoBehaviour Callbacks
@@ -103,12 +109,24 @@ public class CameraWork : MonoBehaviour
 		{
 			cameraOffset.z = -distance;
 			cameraOffset.y = 0f;
-			
-		    cameraTransform.position = Vector3.Lerp(cameraTransform.position, this.transform.position +this.transform.TransformVector(cameraOffset), 10f);
 
-		    //cameraTransform.LookAt(this.transform.position + centerOffset);
+			Vector3 targetPosition = new Vector3(this.transform.position.x, this.transform.position.y, cameraTransform.position.z);
+			Debug.Log("Koord " + targetPosition);
+			if ((targetPosition.x + cameraSize) > maxX | (targetPosition.x - cameraSize) < minX)
+			{
+				targetPosition.x = cameraTransform.position.x;
+			}
+			if ((targetPosition.y + cameraSize) > maxY | (targetPosition.y - cameraSize) < minY)
+			{
+				targetPosition.y = cameraTransform.position.y;
+			}
+
+			cameraTransform.position = Vector3.Lerp(cameraTransform.position, targetPosition, 10f);
+
+			
+			//cameraTransform.LookAt(this.transform.position + centerOffset);
 		    
-	    }
+		}
 
 	   
 		void Cut()

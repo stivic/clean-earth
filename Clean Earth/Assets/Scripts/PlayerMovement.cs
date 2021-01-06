@@ -79,12 +79,20 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IPunObservable
 		    WorldInit.Instance.currentReportCount--;
 		    if (this.GetComponent<PlayerInfo>().wasBadGuy)
 		    {
-			    
-			    Destroy(WorldInit.Instance.badAIPlayers[WorldInit.Instance.badAIPlayers.Count-1]);
+			    this.GetComponent<PlayerInfo>().wasBadGuy = false;
+			    GameObject badAI = WorldInit.Instance.badAIPlayers[WorldInit.Instance.badAIPlayers.Count - 1];
+			    PhotonNetwork.Destroy(badAI);
+			    WorldInit.Instance.badAIPlayers.Remove(badAI);
+			    if (WorldInit.Instance.badAIPlayers.Count <= 0)
+			    {
+				    // new wave
+				    WorldInit.Instance.WaveSetup();
+			    }
 		    }
 		    else if (WorldInit.Instance.currentReportCount < WorldInit.Instance.badAIPlayers.Count)
 		    {
-			    // Game Over
+			    WorldInit.Instance.gameOver = true;
+			    WorldInit.Instance.IncreaseScore();
 		    }
 				
 	    }

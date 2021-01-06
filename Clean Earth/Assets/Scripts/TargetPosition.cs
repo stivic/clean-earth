@@ -23,6 +23,11 @@ public class TargetPosition : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (aiPosition == null)
+        {
+           return;
+        }
+        
         if ((Vector3.Distance(position.position, aiPosition.position) < 2f) && !targetReached)
         {
             StartCoroutine(ChangeTargetCo());

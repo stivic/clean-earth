@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 
-public class Minimap : MonoBehaviour
+public class Minimap : MonoBehaviourPun
 {
     Transform cameraTransform;
     private Transform playerTransform;
@@ -17,15 +18,27 @@ public class Minimap : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerTransform =  GameObject.FindGameObjectsWithTag("myself")[0].transform;
-        
+       
         cameraTransform = GameObject.FindGameObjectWithTag("Minimap").transform;
-        Debug.Log("Camera tr: " + cameraTransform.position);
+        if (GameObject.FindGameObjectWithTag("myself") == null)
+        {
+            return;
+        } 
+        playerTransform =  GameObject.FindGameObjectWithTag("myself").transform;
     }
 
     void LateUpdate()
     {
-        int cameraSize = 50;
+        if (playerTransform == null || cameraTransform == null)
+        {
+            if (GameObject.FindGameObjectWithTag("myself") == null)
+            {
+                return;
+            }
+            playerTransform = GameObject.FindGameObjectWithTag("myself").transform;
+            return;
+        }
+        int cameraSize = 65;
 
         Vector3 newPosition = playerTransform.position;
         newPosition.z = cameraTransform.position.z;

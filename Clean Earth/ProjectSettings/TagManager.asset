@@ -11,6 +11,10 @@ TagManager:
   - Bullet
   - Minimap
   - BadGuy
+  - showOnFinish
+  - waveText
+  - showOnPause
+  - showOnPlay
   layers:
   - Default
   - TransparentFX
@@ -26,7 +30,7 @@ TagManager:
   - 
   - Both
   - Minimap
-  - 
+  - ShadowPause
   - 
   - 
   - 

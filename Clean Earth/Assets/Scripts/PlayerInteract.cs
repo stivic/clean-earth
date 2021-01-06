@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using Photon.Pun;
 
@@ -36,14 +37,14 @@ public class PlayerInteract : MonoBehaviourPun
             Debug.Log("Krece bacati");
             inventory.ThrowItem();
         }
-
-        DisplayUI.Instance.karma = info.GetKarma();
-        DisplayUI.Instance.inventoryCount = inventory.Count();
-
-
+        
     }
     public void OnTriggerEnter2D(Collider2D collision)
     {
+        if (info == null)
+        {
+            return;
+        }
         if (collision.CompareTag("interactObject"))
         {
             Debug.Log(collision.name);

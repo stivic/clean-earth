@@ -21,9 +21,15 @@ public class TeleportationOrb : MonoBehaviour
 
     public void Setup(Vector2 velocity)
     {
-        isActive = true;
+        
         myRigidBody.velocity = velocity.normalized * speed;
+        Invoke("SetActive", .5f);
         Destroy(gameObject, duration);
+    }
+
+    private void SetActive()
+    {
+        isActive = true;
     }
 
     public void OnTriggerEnter2D(Collider2D other)
@@ -38,23 +44,24 @@ public class TeleportationOrb : MonoBehaviour
     
     private void SwapPlayers(Transform ai)
     {
+        if (player.GetComponent<PlayerInfo>().wasBadGuy)
+        {
+            player.GetComponent<PlayerInfo>().wasBadGuy = false;
+        }
         SwapPlayerPosition(player.transform, ai);
         if (ai.GetComponent<PlayerInfo>().isBadGuy)
         {
             List<Transform> aiPlayers = WorldInit.Instance.aiPlayers;
-            Transform newAI = aiPlayers[Random.Range(0, aiPlayers.Count)];
-            newAI.GetComponent<PlayerInfo>().wasBadGuy = true;
+            Transform newAI = aiPlayers[Random.Range(0, aiPlayers.Count-1)];
             SwapPlayerInfo(player.GetComponent<PlayerInfo>(), newAI.GetComponent<PlayerInfo>());
+            player.GetComponent<PlayerInfo>().wasBadGuy = true;
             SwapPlayerInventory(player.GetComponent<Inventory>(), newAI.GetComponent<Inventory>()); 
             SwapPlayerPosition(ai, newAI);
             
         }
         else
         {
-            if (player.GetComponent<PlayerInfo>().wasBadGuy)
-            {
-                player.GetComponent<PlayerInfo>().wasBadGuy = false;
-            }
+            
             SwapPlayerInfo(player.GetComponent<PlayerInfo>(), ai.GetComponent<PlayerInfo>());
             SwapPlayerInventory(player.GetComponent<Inventory>(), ai.GetComponent<Inventory>()); 
         }
@@ -74,7 +81,7 @@ public class TeleportationOrb : MonoBehaviour
         float temp = p1.GetKarma();
         p1.SetKarma(p2.GetKarma());
         p2.SetKarma(temp);
-        
+
     }
 
     private void SwapPlayerInventory(Inventory i1, Inventory i2)
@@ -86,6 +93,11 @@ public class TeleportationOrb : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D other)
     {
+        if (other.gameObject.CompareTag("myself"))
+        {
+            Physics2D.IgnoreCollision(GetComponent<Collider2D>(), other.gameObject.GetComponent<Collider2D>());
+            return;
+        }
         isActive = false;
         Destroy(gameObject);
     }

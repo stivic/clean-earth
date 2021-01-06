@@ -1,28 +1,38 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using Photon.Pun;
 
 public class WorldInit : MonoBehaviourPunCallbacks
 {
-    public uint trashCanStartNumber;
-    public uint garbageStartNumber;
-    public uint aiStartNumber;
-    public uint badAIStartNumber;
+    public int trashCanStartNumber;
+    public int garbageStartNumber;
+    public int aiStartNumber;
+    public int badAIStartNumber;
     public GameObject trashCan;
     public List<GameObject> garbage;
     public GameObject positionTester;
     public List<Transform> aiPlayers;
     public List<GameObject> badAIPlayers;
+    public Timer timer;
+
+    public int waveNumber = 1;
+    public int duration;
+    public int allowedGarbageDecrease = 1;
+    public bool waveCompleted = false;
+    public bool gameOver = false;
+    public float score = 0;
+    
     
     private const float minY = -100f;
     private const float minX = -100f;
     private const float maxY = 100f;
     private const float maxX = 90f;
 
-    public uint allowedGarbageCount;
-    public uint currentGarbageCount = 0;
-    public uint currentReportCount = 0;
+    public int allowedGarbageCount;
+    public int currentGarbageCount = 0;
+    public int currentReportCount = 0;
 
     
     
@@ -36,6 +46,7 @@ public class WorldInit : MonoBehaviourPunCallbacks
             Destroy(this.gameObject);
         } else {
             _instance = this;
+            
         }
     }
 
@@ -70,10 +81,10 @@ public class WorldInit : MonoBehaviourPunCallbacks
 
     public void SpawnObjectsOnStart()
     {
-        SpawnAI(aiStartNumber);
-        SpawnBadAI(badAIStartNumber);
-        SpawnGarbage(garbageStartNumber);
-        SpawnTrashCans(trashCanStartNumber);
+        SpawnAI((uint)aiStartNumber);
+        SpawnBadAI(waveNumber);
+        SpawnGarbage((uint)garbageStartNumber);
+        SpawnTrashCans((uint)trashCanStartNumber);
     }
 
     public void SpawnAI(uint aiNumber)
@@ -91,7 +102,7 @@ public class WorldInit : MonoBehaviourPunCallbacks
         }
     }
 
-    public void SpawnBadAI(uint badAINumber)
+    public void SpawnBadAI(int badAINumber)
     {
         for (int i = 0; i < badAINumber; i++)
         {
@@ -103,6 +114,8 @@ public class WorldInit : MonoBehaviourPunCallbacks
             }
             badAIPlayers.Add(badAI);
         }
+
+        currentReportCount = badAINumber + 2;
     }
 
     public void SpawnGarbage(uint garbageNumber)
@@ -131,5 +144,68 @@ public class WorldInit : MonoBehaviourPunCallbacks
                 item.name = item.name.Remove(item.name.Length - 7);
             }
         }
+    }
+
+    public void TimeTillNewRestriction()
+    {
+        Timer.Instance.duration = duration;
+        Timer.Instance.Begin();
+
+        //yield return new WaitUntil(() => Timer.Instance.timeRemaining <= 0);
+        
+        Invoke("CheckEndConditions", duration);
+    }
+
+    private void CheckEndConditions()
+    {
+        if (currentGarbageCount > allowedGarbageCount)
+        {
+            gameOver = true;
+            IncreaseScore();
+        }
+        else if (allowedGarbageCount > 0)
+        {
+            allowedGarbageCount -= allowedGarbageDecrease;
+            Invoke("TimeTillNewRestriction", 1f);
+        }
+        
+    }
+
+    public float GetAvgKarma()
+    {
+        if (aiPlayers == null)
+        {
+            return 0;
+        }
+        float sum = 0;
+        foreach (var ai in aiPlayers)
+        {
+            sum += ai.GetComponent<PlayerInfo>().GetKarma();
+        }
+
+        return sum / aiPlayers.Count;
+    }
+
+    public void IncreaseScore()
+    {
+        Debug.Log("Score before: " + score);
+        score += waveNumber * Mathf.Clamp((allowedGarbageCount - currentGarbageCount),  0, (allowedGarbageCount - currentGarbageCount))* GetAvgKarma() * 10;
+        Debug.Log("Avg Karma: " + GetAvgKarma());
+        Debug.Log("Allowed: " + (allowedGarbageCount));
+        Debug.Log("Current: " + (currentGarbageCount));
+        Debug.Log("Score: "+ score);
+    }
+
+    public void WaveSetup()
+    {
+       waveCompleted = true;
+       waveNumber++;
+       IncreaseScore();
+       allowedGarbageDecrease = waveNumber;
+       allowedGarbageCount = garbageStartNumber;
+       SpawnBadAI(waveNumber);
+       SpawnAI((uint)waveNumber);
+       SpawnGarbage((uint)(garbageStartNumber-currentGarbageCount));
+       duration += waveNumber * 2;
     }
 }

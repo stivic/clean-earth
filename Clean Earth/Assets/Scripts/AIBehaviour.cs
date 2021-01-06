@@ -105,12 +105,12 @@ public class AIBehaviour : MonoBehaviour
 
     private bool CollectGarbage()
     {
-        return Random.Range(0f, 1f) <= info.GetKarma()/2f;
+        return Random.Range(0f, 1f) <= info.GetKarma() * info.GetKarma()/2f;
     }
 
     private bool ThrowGarbage()
     {
-        return Random.Range(0f, 1f) <= (1-info.GetKarma())/2f;
+        return Random.Range(0f, 1f) <= (1-info.GetKarma()*info.GetKarma())/2f;
     }
     
     private bool DisposeGarbage()

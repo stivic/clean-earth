@@ -359,7 +359,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc0167338e04547cd974cc9268c05aab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 6730021582846051596, guid: 37b85345785034d718fd5f2e0c85fe88, type: 3}
   info: {fileID: 8475636325742894884}
   inventory: {fileID: 9205868344133837449}
 --- !u!114 &2702747860713539472
@@ -450,7 +449,7 @@ SpriteRenderer:
   m_SortingOrder: 13
   m_Sprite: {fileID: 8014604243891610540, guid: 8a6cd262f7b3041129788fd260de4392,
     type: 3}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
