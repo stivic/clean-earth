@@ -1,20 +1,33 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
+using Photon.Pun;
 
-public class PlayerInteract : MonoBehaviour
+public class PlayerInteract : MonoBehaviourPun
 {
-    public GameObject currentInterObj = null;
-    public InteractionObject currentInterObjScript = null;
-    public Inventory inventoryScript;
+    private GameObject currentInterObj = null;
+    
+    public Inventory inventory;
+    public PlayerInfo info;
+    
+
+    void Start()
+    {
+        
+        info = GetComponent<PlayerInfo>();
+        inventory = GetComponent<Inventory>();
+        
+    }
 
     public void Update()
     {
         if (Input.GetButtonDown("InteractUp") &&  currentInterObj)
         {
-            if (currentInterObjScript.inventory)
+            //if (currentInterObjScript.inventory)
             {
-                inventoryScript.AddItem(currentInterObj);
+                currentInterObj.GetPhotonView().RequestOwnership();
+                inventory.AddItem(currentInterObj);
             }
             
 
@@ -22,29 +35,45 @@ public class PlayerInteract : MonoBehaviour
         if (Input.GetButtonDown("InteractDown"))
         {
             Debug.Log("Krece bacati");
-            inventoryScript.ThrowItem();
+            inventory.ThrowItem();
         }
+        
     }
     public void OnTriggerEnter2D(Collider2D collision)
     {
+        if (info == null)
+        {
+            return;
+        }
         if (collision.CompareTag("interactObject"))
         {
             Debug.Log(collision.name);
             currentInterObj = collision.gameObject;
-            currentInterObjScript = currentInterObj.GetComponent<InteractionObject>();
-
+        }
+        else if(collision.CompareTag("trashCan"))
+        {
+            Debug.Log("unutar smeca.");
+            info.insideTrashCanArea = true;
         }
     }
 
     public void OnTriggerExit2D(Collider2D collision)
     {
+        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
+        {
+            return;
+        }
         if (collision.CompareTag("interactObject"))
         {
             if(collision.gameObject == currentInterObj)
             {
                 currentInterObj = null;
-                currentInterObjScript = null;
             }
         }
+        else if (collision.CompareTag("trashCan"))
+        {
+            info.insideTrashCanArea = false;
+        }
     }
+    
 }

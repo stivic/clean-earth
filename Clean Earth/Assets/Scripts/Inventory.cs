@@ -1,76 +1,143 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
+using Random = UnityEngine.Random;
 
-public class Inventory : MonoBehaviour
+public class Inventory : MonoBehaviourPun
 {
-    //public static int inventoryNum = 10;
-    public GameObject[] inventory = new GameObject[10];
-   
-    
+    private static int inventorySize = 10;
+    public List<String> inventory;
+    private static GameObject[] _garbage;
+    private PlayerInfo info;
+    private float inTrashCoef = 0.5f;
+    private float timeForNewItem = 120f;
 
-    public void AddItem(GameObject item)
+    private void Awake()
     {
-        bool isFull = false;
-        for(int i = 0; i<inventory.Length; i++)
+        inventory = new List<String>(inventorySize);
+        PhotonNetwork.AddCallbackTarget(this);
+    }
+
+    private void OnDestroy()
+    {
+        PhotonNetwork.RemoveCallbackTarget(this);
+    }
+
+    void Start()
+    {
+        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
         {
-            if (inventory[i] == null)
+            return;
+        }
+        info = GetComponent<PlayerInfo>();
+        _garbage = Resources.LoadAll<GameObject>("Prefabs/Objects/Garbage");
+        InvokeRepeating(nameof(AddRandomItem), 30f, timeForNewItem);
+    }
+
+    public bool AddItem(GameObject item)
+    {
+
+        if (inventory.Count < inventorySize)
+        {
+            if (item.name.EndsWith("(Clone)"))
             {
-                inventory[i] = item;
-                Debug.Log(item.name + " is added");
-                isFull = true;
-                item.SendMessage("DoInteraction");
-                break;
+                item.name = item.name.Remove(item.name.Length - 7);
             }
+
+            if (item.GetPhotonView().Owner.UserId != PhotonNetwork.LocalPlayer.UserId)
+            {
+                item.GetPhotonView().TransferOwnership(PhotonNetwork.LocalPlayer);
+            }
+            
+            if (item.GetPhotonView().Owner.UserId == PhotonNetwork.LocalPlayer.UserId)
+            {
+                inventory.Add(item.name);
+                info.IncreaseKarma(item.name);
+                WorldInit.Instance.currentGarbageCount--;
+                PhotonNetwork.Destroy(item);
+            }
+            
+            
+            return true;
         }
-        if (!isFull)
-        {
-            Debug.Log("Inventory is full");
-        }
-        
-        
+        return false;
     }
     //za sada baca prvi item po redu iz inventory-a
     public void ThrowItem()
     {
-        if (isInventoryEmpty())
+        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
         {
-            Debug.Log("Inventory is empty");
+            return;
+        }
+        if (!inventory.Any())
+        {
+            print("Inventory is empty!");
         }
         else
         {
-            GameObject item = inventory[0];
-            SpriteRenderer r = gameObject.GetComponent<SpriteRenderer>();
-            Debug.Log(r.sprite);
-            //Debug.Log(gameObject.transform.position.x + " " + gameObject.transform.position.y + " " + item.transform.position.z);
-            Vector3 newPosition = new Vector3((float)(gameObject.transform.position.x), (float)(gameObject.transform.position.y), item.transform.position.z);
-            item.transform.position = newPosition;
-            //item.SendMessage("Throw");
-            item.SetActive(true);
-
-            GameObject[] inventoryTmp = new GameObject[10];
-            for(int i = 1; i<inventory.Length; i++)
+            int randomItem = Random.Range(0, inventory.Count);
+            GameObject item = PhotonNetwork.Instantiate(Path.Combine("Prefabs/Objects/Garbage",inventory[randomItem]), transform.position, Quaternion.identity);
+            item.GetPhotonView().OwnershipTransfer = OwnershipOption.Takeover;
+            if (item.name.EndsWith("(Clone)"))
             {
-                inventoryTmp[i - 1] = inventory[i];
+                item.name = item.name.Remove(item.name.Length - 7);
             }
-
-            inventory = inventoryTmp;
+            inventory.RemoveAt(randomItem);
+            //item.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
+            //item.SetActive(true);
+            if (info.insideTrashCanArea)
+            {
+                if(item != null)
+                {
+                    info.IncreaseKarma(item.name, inTrashCoef);
+                    PhotonNetwork.Destroy(item);
+                    
+                }
+            }
+            else
+            {
+                info.DecreaseKarma(item.name);
+                WorldInit.Instance.currentGarbageCount++;
+            }
 
         }
     }
-
-    public bool isInventoryEmpty()
+    
+    public void AddRandomItem()
     {
-        
-        for (int i = 0; i < inventory.Length; i++)
+        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
         {
-            if (inventory[i] != null)
-            {
-                Debug.Log("Inventory ima nesto");
-                return false;
-            }
+            return;
         }
-        Debug.Log("Inventory je prazan");
-        return true;
+        if (inventory.Count < inventorySize)
+        {
+            int itemIndex = Random.Range (0, _garbage.Length);
+            //GameObject item = Instantiate (_garbage [itemIndex]);
+            inventory.Add(_garbage[itemIndex].name);
+        }
     }
+
+    public bool Empty()
+    {
+        return !inventory.Any();
+    }
+
+    public int Count()
+    {
+        return inventory.Count;
+    }
+
+    public int Size()
+    {
+        return inventorySize;
+    }
+
+
+  
 }
+

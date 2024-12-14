@@ -4,7 +4,17 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - myself
+  - teleportationOrb
   - interactObject
+  - trashCan
+  - Bullet
+  - Minimap
+  - BadGuy
+  - showOnFinish
+  - waveText
+  - showOnPause
+  - showOnPlay
   layers:
   - Default
   - TransparentFX
@@ -14,13 +24,13 @@ TagManager:
   - UI
   - 
   - 
+  - Collision
+  - TeleportationOrb
+  - Interaction
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Both
+  - Minimap
+  - ShadowPause
   - 
   - 
   - 
@@ -42,9 +52,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Ground
-    uniqueID: 4291666301
-    locked: 0
   - name: Player
-    uniqueID: 3965827651
+    uniqueID: 219042417
     locked: 0
